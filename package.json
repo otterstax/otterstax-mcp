@@ -1,0 +1,42 @@
+{
+  "name": "@otterstax/mcp",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MCP server for OtterStax federated SQL",
+  "author": {
+    "name": "OtterStax",
+    "url": "https://github.com/otterstax"
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "otterstax-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run test/unit",
+    "test:integration": "npm run build && vitest run test/integration --testTimeout 60000",
+    "build:mcpb": "npm run build && mcpb pack . otterstax-mcp.mcpb"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "^2.1.2",
+    "@modelcontextprotocol/client": "^2.3.1",
+    "@modelcontextprotocol/server": "^2.3.1",
+    "@types/node": "^22.20.5",
+    "@types/pg": "^8.23.1",
+    "pg": "^8.23.1",
+    "tsup": "^9.0.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5",
+    "zod": "^4.6.7"
+  }
+}

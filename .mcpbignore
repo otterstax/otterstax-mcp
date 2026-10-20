@@ -1,0 +1,11 @@
+node_modules/
+src/
+test/
+.idea/
+*.mcpb
+package.json
+package-lock.json
+tsconfig.json
+tsup.config.ts
+.gitignore
+.mcpbignore

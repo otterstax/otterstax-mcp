@@ -1,0 +1,47 @@
+{
+  "manifest_version": "0.3",
+  "name": "otterstax",
+  "display_name": "OtterStax",
+  "version": "0.0.0",
+  "description": "Query OtterStax federated SQL: MySQL, PostgreSQL, ClickHouse, S3 and Kafka behind one endpoint.",
+  "author": {
+    "name": "OtterStax",
+    "url": "https://github.com/otterstax"
+  },
+  "license": "Apache-2.0",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {
+        "OTTERSTAX_URL": "${user_config.otterstax_url}"
+      }
+    }
+  },
+  "user_config": {
+    "otterstax_url": {
+      "type": "string",
+      "title": "OtterStax URL",
+      "description": "PostgreSQL-wire address of the OtterStax server",
+      "default": "postgresql://localhost:8817",
+      "required": false
+    }
+  },
+  "tools": [
+    { "name": "execute_sql", "description": "Run any SQL statement" },
+    { "name": "explain_query", "description": "Show the plan of a statement" },
+    { "name": "list_databases", "description": "List connections and local databases" },
+    { "name": "list_schemas", "description": "List schemas inside a database" },
+    { "name": "list_tables", "description": "List tables under their full SQL names" },
+    { "name": "describe_table", "description": "Columns of a table with types" },
+    { "name": "search_objects", "description": "Search tables or columns by name" },
+    { "name": "table_stats", "description": "Row count and per-column profile of a table" }
+  ],
+  "compatibility": {
+    "runtimes": {
+      "node": ">=22.0.0"
+    }
+  }
+}
