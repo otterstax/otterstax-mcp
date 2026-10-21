@@ -23,10 +23,15 @@ const CRASH_HINT =
 // pg's messages for a socket that died under it; a refused connection is the engine being down
 const CONNECTION_LOST = /Connection terminated|ECONNRESET|ECONNREFUSED|EPIPE|socket hang up/;
 
+export function isConnectionLost(e: unknown): boolean {
+  const err = e as { message?: string; code?: string };
+  return CONNECTION_LOST.test(String(err.message ?? e)) || CONNECTION_LOST.test(String(err.code));
+}
+
 export function errorResult(e: unknown): CallToolResult {
   const err = e as { message?: string; code?: string };
   const message = String(err.message ?? e);
-  const lost = CONNECTION_LOST.test(message) || CONNECTION_LOST.test(String(err.code));
+  const lost = isConnectionLost(e);
   return {
     isError: true,
     content: [

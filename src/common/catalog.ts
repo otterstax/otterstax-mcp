@@ -2,6 +2,7 @@
 // tables under the SQL names that resolve, and their columns. The naming rules
 // mirror otterstax/frontend/spark_connect_server/catalog_rows.hpp.
 import type { Db } from "./db.js";
+import { renderTypeSpec, STANDARD_NAMES } from "./type-spec.js";
 
 export const FIRST_USER_OID = 16384;
 const MANIFEST = "__otterstax_tables";
@@ -114,7 +115,7 @@ export function buildCatalog(rows: CatalogRows): Catalog {
       attributesOf(t.oid).map((a) => ({
         name: a.attname,
         // ARRAY / DECIMAL / STRUCT / ENUM carry their full type in atttypspec
-        type: a.atttypspec ? a.atttypspec : (typeNames.get(Number(a.atttypid)) ?? String(a.atttypid)),
+        type: a.atttypspec ? renderTypeSpec(a.atttypspec) : (typeNames.get(Number(a.atttypid)) ?? String(a.atttypid)),
         nullable: !a.attnotnull,
       })),
     indexes: (t) => {
@@ -143,24 +144,6 @@ export function parseMirrorName(relname: string): { db: string; schema: string; 
 
 // pg_type lists several names per oid (33 = string, text, varchar, bpchar, name);
 // show the SQL-standard one
-const STANDARD_NAMES = new Map([
-  ["bool", "boolean"],
-  ["int1", "tinyint"],
-  ["uint1", "utinyint"],
-  ["int2", "smallint"],
-  ["uint2", "usmallint"],
-  ["int4", "integer"],
-  ["uint4", "uinteger"],
-  ["int8", "bigint"],
-  ["uint8", "ubigint"],
-  ["int16", "hugeint"],
-  ["uint16", "uhugeint"],
-  ["float4", "real"],
-  ["float8", "double precision"],
-  ["string", "text"],
-  ["blob", "bytea"],
-]);
-
 export function sqlTypeNames(types: TypeRow[]): Map<number, string> {
   const names = new Map<number, string>();
   for (const t of types) {
